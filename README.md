@@ -1,6 +1,6 @@
 # Professional AI Voice Assistant
 
-This repository is building a production-quality AI voice assistant in phases. The current implementation is **Phase 1 only**: a secure, persisted, streaming **text conversation foundation** that prepares the system for realtime voice in a later phase.
+This repository includes the Phase 1 secure, persisted streaming text foundation and a Phase 2 realtime voice transport MVP. Voice uses the same persisted conversations and `AssistantOrchestrator` as text chat.
 
 ## Architecture Summary
 
@@ -22,10 +22,12 @@ See `docs/architecture/technical-blueprint.md` for the full blueprint.
 - Fake local AI provider for deterministic development without external credentials.
 - Optional OpenAI provider behind the `ChatModelProvider` abstraction.
 - Basic settings UI for response style.
+- Authenticated, versioned WebSocket voice sessions with bounded reconnects, interruption, transcript events, and browser microphone/playback support.
+- Provider-agnostic asynchronous STT/TTS contracts. Providers are deliberately unavailable until configured; the app never fakes speech processing.
 
 ## Intentionally Deferred
 
-Voice/audio, STT, TTS, WebSocket voice sessions, web search, tool/plugin ecosystem, long-term memory, pgvector, reminders, email/calendar integrations, destructive actions, scheduled background workflows, and multi-provider routing are intentionally not implemented in Phase 1.
+Real STT/TTS adapters, web search, tool/plugin ecosystem, long-term memory, pgvector, reminders, email/calendar integrations, destructive actions, scheduled background workflows, and multi-provider routing remain out of scope.
 
 ## Prerequisites
 
@@ -42,6 +44,8 @@ cp .env.example .env
 ```
 
 For local development, keep `AI_PROVIDER=fake` unless you intentionally configure a real provider. Do not commit secrets.
+
+Voice requires a modern browser with `getUserMedia`, `MediaRecorder`, and audio playback support. The browser authenticates its WebSocket using the existing JWT as a WebSocket subprotocol; provider credentials always remain server-side. With the default `STT_PROVIDER` and `TTS_PROVIDER` values, voice reports `stt_unavailable` / `tts_unavailable`; configure concrete server adapters and keys before expecting real audio to work.
 
 ## Database Setup
 

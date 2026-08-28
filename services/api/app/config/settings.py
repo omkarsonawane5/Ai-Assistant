@@ -18,6 +18,15 @@ class Settings(BaseSettings):
     ai_api_key: str | None = None
     assistant_system_prompt: str = "You are a helpful, concise AI assistant."
     recent_message_limit: int = 20
+    stt_provider: str = "unconfigured"
+    stt_model: str = ""
+    stt_api_key: str | None = None
+    tts_provider: str = "unconfigured"
+    tts_model: str = ""
+    tts_api_key: str | None = None
+    realtime_session_ttl_seconds: int = 90
+    realtime_max_audio_chunk_bytes: int = 256_000
+    realtime_max_event_bytes: int = 400_000
 
     @field_validator("cors_origins", mode="before")
     @classmethod
