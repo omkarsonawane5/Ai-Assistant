@@ -3,6 +3,8 @@ import type { Conversation, Message, Settings, StreamEvent, User } from '../../t
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000';
 let token = localStorage.getItem('assistant.token') ?? '';
 
+export function getAccessToken() { return token; }
+
 export function setToken(next: string) {
   token = next;
   localStorage.setItem('assistant.token', next);
